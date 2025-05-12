@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Google Login with Firebase</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  </head>
+  <body>
+    <h2>تسجيل الدخول باستخدام Google</h2>
+    <button onclick="loginWithGoogle()">تسجيل الدخول</button>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyBrKgS42zVqKtnYeI4dkjc3dBOPzvXerNA",
+        authDomain: "echo-c4f08.firebaseapp.com",
+        projectId: "echo-c4f08",
+        storageBucket: "echo-c4f08.appspot.com",
+        messagingSenderId: "685664975829",
+        appId: "1:685664975829:android:6bceb33fad6f433fc89b5c"
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+
+      function loginWithGoogle() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider)
+          .then((result) => {
+            const user = result.user;
+            const email = user.email;
+            // إرسال البريد الإلكتروني إلى App Inventor
+            if (window.AppInventor) {
+              window.AppInventor.setWebViewString(email);
+            } else {
+              alert("تم تسجيل الدخول: " + email);
+            }
+          })
+          .catch((error) => {
+            alert("فشل تسجيل الدخول: " + error.message);
+          });
+      }
+    </script>
+  </body>
+</html>
