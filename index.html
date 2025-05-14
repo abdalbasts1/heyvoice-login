@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Google Sign-In</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDHUFlyHzMt68v42bXa3nLsSSPlKHPmV-4",
+      authDomain: "heyvoice-2a72f.firebaseapp.com",
+      projectId: "heyvoice-2a72f",
+      storageBucket: "heyvoice-2a72f.firebasestorage.app",
+      messagingSenderId: "447288555951",
+      appId: "1:447288555951:android:4a2c550f808f11187f175a"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    function loginWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+          const user = result.user;
+          const data = {
+            name: user.displayName,
+            email: user.email,
+            uid: user.uid
+          };
+          if (window.AppInventor) {
+            window.AppInventor.setWebViewString(JSON.stringify(data));
+          } else {
+            alert("تسجيل الدخول ناجح! لكن التطبيق غير متصل.");
+            console.log(data);
+          }
+        })
+        .catch((error) => {
+          console.error("خطأ في تسجيل الدخول:", error);
+        });
+    }
+  </script>
+</head>
+<body style="text-align:center; margin-top:50px;">
+  <h2>تسجيل الدخول باستخدام Google</h2>
+  <button onclick="loginWithGoogle()" style="padding:10px 20px; font-size:16px;">تسجيل الدخول</button>
+</body>
+</html>
