@@ -1,47 +1,54 @@
-
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>Google Sign-In</title>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDHUFlyHzMt68v42bXa3nLsSSPlKHPmV-4",
-      authDomain: "heyvoice-2a72f.firebaseapp.com",
-      projectId: "heyvoice-2a72f",
-      storageBucket: "heyvoice-2a72f.firebasestorage.app",
-      messagingSenderId: "447288555951",
-      appId: "1:447288555951:android:4a2c550f808f11187f175a"
-    };
-    firebase.initializeApp(firebaseConfig);
+  <head>
+    <meta charset="UTF-8" />
+    <title>HeyVoice Login</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyDHUFlyHzMt68v42bXa3nLsSSPlKHPmV-4",
+        authDomain: "heyvoice-2a72f.firebaseapp.com",
+        projectId: "heyvoice-2a72f",
+        storageBucket: "heyvoice-2a72f.firebasestorage.app",
+        messagingSenderId: "447288555951",
+        appId: "1:447288555951:android:4a2c550f808f11187f175a"
+      };
+      firebase.initializeApp(firebaseConfig);
 
-    function loginWithGoogle() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithPopup(provider)
-        .then((result) => {
-          const user = result.user;
-          const data = {
-            name: user.displayName,
-            email: user.email,
-            uid: user.uid
-          };
-          if (window.AppInventor) {
-            window.AppInventor.setWebViewString(JSON.stringify(data));
-          } else {
-            alert("تسجيل الدخول ناجح! لكن التطبيق غير متصل.");
-            console.log(data);
-          }
-        })
-        .catch((error) => {
-          console.error("خطأ في تسجيل الدخول:", error);
-        });
-    }
-  </script>
-</head>
-<body style="text-align:center; margin-top:50px;">
-  <h2>تسجيل الدخول باستخدام Google</h2>
-  <button onclick="loginWithGoogle()" style="padding:10px 20px; font-size:16px;">تسجيل الدخول</button>
-</body>
+      window.onload = function () {
+        firebase.auth().getRedirectResult()
+          .then((result) => {
+            if (result.user) {
+              const user = result.user;
+              const data = {
+                name: user.displayName,
+                email: user.email,
+                uid: user.uid
+              };
+              if (window.AppInventor) {
+                window.AppInventor.setWebViewString(JSON.stringify(data));
+              } else {
+                alert("تم تسجيل الدخول، لكن التطبيق غير متصل.");
+                console.log(data);
+              }
+            }
+          })
+          .catch((error) => {
+            console.error("فشل تسجيل الدخول:", error);
+          });
+      };
+
+      function loginWithGoogle() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithRedirect(provider);
+      }
+    </script>
+  </head>
+  <body style="text-align:center; margin-top: 100px; background: linear-gradient(to bottom right, #6b46c1, #b83280); color: white;">
+    <h1>HeyVoice</h1>
+    <button onclick="loginWithGoogle()" style="padding: 12px 24px; font-size: 18px; background-color: white; color: #b83280; border: none; border-radius: 10px;">
+      Sign in with Google
+    </button>
+  </body>
 </html>
