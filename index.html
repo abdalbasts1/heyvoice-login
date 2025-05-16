@@ -2,59 +2,48 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>HeyVoice Login</title>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <style>
-    body {
-      background: linear-gradient(to bottom right, #9333ea, #ec4899);
-      color: white;
-      text-align: center;
-      padding-top: 100px;
-      font-family: sans-serif;
-    }
-    button {
-      padding: 12px 25px;
-      font-size: 16px;
-      background: white;
-      color: black;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-  </style>
+  <title>تسجيل الدخول بـ Google</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 </head>
 <body>
-  <h1>HeyVoice</h1>
-  <button onclick="signInWithGoogle()">تسجيل الدخول بـ Google</button>
+  <h2>تسجيل الدخول باستخدام Google</h2>
+  <button onclick="login()">تسجيل الدخول</button>
 
   <script>
-    // إعداد Firebase
+    // إعدادات Firebase الخاصة بك
     const firebaseConfig = {
-      apiKey: "ضع هنا apiKey",
-      authDomain: "ضع هنا authDomain",
-      projectId: "ضع هنا projectId",
-      appId: "ضع هنا appId"
+      apiKey: "ضع_apiKey_هنا",
+      authDomain: "ضع_authDomain_هنا",
+      projectId: "ضع_projectId_هنا",
+      storageBucket: "ضع_storageBucket_هنا",
+      messagingSenderId: "ضع_messagingSenderId_هنا",
+      appId: "ضع_appId_هنا"
     };
 
+    // تهيئة Firebase
     firebase.initializeApp(firebaseConfig);
 
-    function signInWithGoogle() {
+    function login() {
       const provider = new firebase.auth.GoogleAuthProvider();
       firebase.auth().signInWithPopup(provider)
-        .then(result => {
+        .then((result) => {
           const user = result.user;
-          const userInfo = {
+          const data = {
             name: user.displayName,
             email: user.email,
             uid: user.uid
           };
+
+          // إرسال البيانات إلى MIT App Inventor أو Niotron عبر WebViewString
           if (window.AppInventor) {
-            window.AppInventor.setWebViewString(JSON.stringify(userInfo));
+            window.AppInventor.setWebViewString(JSON.stringify(data));
+          } else {
+            alert("تم تسجيل الدخول:\n" + JSON.stringify(data, null, 2));
           }
         })
-        .catch(error => {
-          alert("فشل تسجيل الدخول: " + error.message);
+        .catch((error) => {
+          alert("حدث خطأ:\n" + error.message);
         });
     }
   </script>
